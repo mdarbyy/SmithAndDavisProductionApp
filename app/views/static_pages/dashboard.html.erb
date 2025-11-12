@@ -526,8 +526,8 @@
           titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
 
           let fileName = startDate === endDate
-            ? `total_sales_for_${startDate.replace(/\//g, '-')}.xlsx`
-            : `total_sales_${startDate.replace(/\//g, '-')}_to_${endDate.replace(/\//g, '-')}.xlsx`;
+            ? `Sales-Report-for-${startDate.replace(/\//g, '-')}.xlsx`
+            : `Sales-Report-from-${startDate.replace(/\//g, '-')}-to-${endDate.replace(/\//g, '-')}.xlsx`;
 
           // --- Row 2: Total amount
           ws.mergeCells('A2:H2');
