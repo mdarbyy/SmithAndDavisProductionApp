@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_11_12_014150) do
+ActiveRecord::Schema[7.0].define(version: 2025_11_12_024329) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,4 +21,17 @@ ActiveRecord::Schema[7.0].define(version: 2025_11_12_014150) do
     t.string "last_name"
   end
 
+  create_table "sales_records", force: :cascade do |t|
+    t.date "sell_date"
+    t.integer "amount_sold"
+    t.integer "items_sold"
+    t.decimal "sales_floor_hours"
+    t.decimal "project_hours", default: "0.0"
+    t.bigint "sales_person_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sales_person_id"], name: "index_sales_records_on_sales_person_id"
+  end
+
+  add_foreign_key "sales_records", "sales_people"
 end

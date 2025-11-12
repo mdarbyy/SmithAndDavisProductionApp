@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sell_date: 2025-11-11
+  total: 1
+  items_sold: 1
+  sales_floor_hours: 9.99
+  project_hours: 9.99
+  sales_person: one
+
+two:
+  sell_date: 2025-11-11
+  total: 1
+  items_sold: 1
+  sales_floor_hours: 9.99
+  project_hours: 9.99
+  sales_person: two

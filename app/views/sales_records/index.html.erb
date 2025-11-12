@@ -2,10 +2,10 @@
 
   <div class="row">
     <div class="col-3 d-flex justify-content-start">
-      <%= button_to 'Cancel', sales_people_path, method: :get, data: { turbo: false }, class: 'btn btn-main btn-left' %>
+      <%= button_to 'Add Sales Record', new_sales_record_path, method: :get, data: { turbo: false }, class: 'btn btn-main btn-left' %>
     </div>
     <div class="col-5 d-flex justify-content-center">
-      <h1><%= @sales_person.first_name + " " + @sales_person.last_name %></h1>
+      <h1>Sales Records</h1>
     </div>
     <div class="col-4 d-flex justify-content-end">
       <form role="search" class="d-flex search-form">
@@ -23,17 +23,15 @@
               <th class="stick" scope="col"><a>Sales Person</a></th>
               <th class="stick" scope="col"><a>Sell Date</a></th>
               <th class="stick" scope="col"><a>Amount Sold</a></th>
-              <th class="stick" scope="col"><a>Number of Sales</a></th>
+              <th class="stick" scope="col" style="min-width: 120px;"><a>Number of Sales</a></th>
               <th class="stick" scope="col"><a>Project Hours</a></th>
-              <th class="stick" scope="col" style="min-width: 140px;"><a>Sales Floor Hours</a></th>
+              <th class="stick" scope="col" style="min-width: 120px;"><a>Sales Floor Hours</a></th>
               <th class="stick" scope="col"><a></a></th>
             </tr>
           </thead>
           <tbody id="content-table-body">
             <% @sales_records.each do |sales_record| %>
-              <tr>
-                <%= render 'sales_records/sales_record', sales_record: sales_record %>
-              </tr>
+              <%= render 'sales_record', sales_record: sales_record %>
             <% end %>
           </tbody>
         </table>
@@ -46,7 +44,7 @@
               <th class="stick" scope="col"><a>Amount Sold</a></th>
               <th class="stick" scope="col"><a>Number of Sales</a></th>
               <th class="stick" scope="col"><a>Project Hours</a></th>
-              <th class="stick" scope="col" style="min-width: 140px;"><a>Sales Floor Hours</a></th>
+              <th class="stick" scope="col" style="min-width: 120px;"><a>Sales Floor Hours</a></th>
               <th class="stick" scope="col"><a></a></th>
             </tr>
           </thead>
@@ -63,13 +61,51 @@
     </div>
 
     <div style="text-align: center;" id="recordCount">
-      <b>
-        Displaying <span id="currentCount"></span> 
-        <span id="recordLabel"
-          data-singular="Sales Record"
-          data-plural="Sales Records">
-        </span>
-      </b>
+      <b>Displaying <span id="currentCount">0</span> of <span id="totalCount"><%= @total_records %></span> Sales Records</b>
     </div>
   </div>
 </div>
+
+<script>
+  var isLoading = false;
+  $(".scrollable-table").scroll(function() {
+    var totalRecords = parseInt($('#totalCount').text());
+    var currentCount = parseInt($('#currentCount').text());
+
+    if (currentCount < totalRecords) {
+      if ($(".scrollable-table").scrollTop() >= $("#content-table").height() - $(".scrollable-table").height() && !isLoading) {
+        loadMoreRecords();
+      }
+    }
+  });
+
+  function loadMoreRecords() {
+    if (isLoading) return;
+    console.log("Loading Sales Records");
+    const currentVisibleCount = $('#content-table tbody tr').length;
+
+    $.ajax({
+      url: "sales_records",
+      data: { offset: currentVisibleCount },
+      type: 'GET',
+      dataType: 'script',
+      cache: true,
+      beforeSend: function(){
+        isLoading = true;
+        $("#loading-spinner").show();
+      },
+      success: function(data) {
+        console.log("Loaded Sales Records");
+        var rowCount = $('#content-table tbody tr').length;
+        $('#currentCount').text(rowCount);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.error("AJAX Error:", textStatus, errorThrown);
+      },
+      complete: function(){
+        isLoading = false;
+        $("#loading-spinner").hide();
+      }
+    });
+  }
+</script>

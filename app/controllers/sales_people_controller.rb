@@ -3,8 +3,7 @@ class SalesPeopleController < ApplicationController
 
   # GET /sales_people or /sales_people.json
   def index
-    #@sales_people = SalesPerson.all.includes(:sales_records).order(name: :asc)
-    @sales_people = SalesPerson.all.order(first_name: :asc, last_name: :asc)
+    @sales_people = SalesPerson.all.includes(:sales_records).order(first_name: :asc, last_name: :asc)
     respond_to do |format|
       format.html
       format.js
@@ -13,6 +12,13 @@ class SalesPeopleController < ApplicationController
 
   # GET /sales_people/1 or /sales_people/1.json
   def show
+    @sales_records = @sales_person.sales_records.order(id: :desc)
+    @total_records = SalesRecord.where(sales_person_id: @sales_person.id).count
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # GET /sales_people/new

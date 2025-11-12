@@ -1,0 +1,110 @@
+<%= form_with(model: sales_record, local: true, id: "sales_record_form") do |form| %>
+  <div class="row g-3 mb-3 align-items-center">
+    <div class="col-12">
+      <label class="col-form-label"><strong>Sales Person</strong></label>
+      <select id="sales_person" class="form-control select2">
+        <%= options_from_collection_for_select(SalesPerson.all.order(:first_name, :last_name), :id, ->(sp) { "#{sp.first_name} #{sp.last_name}" }) %>
+      </select>
+    </div>
+  </div>
+
+  <%= form.hidden_field :sales_person_id, id:"hidden_sales_person" %>
+  <%= form.hidden_field :sell_date, id:"hidden_sell_date" %>
+  
+  <div class="row g-3 mb-3 align-items-center">
+    <div class="col-12">
+      <label class="col-form-label"><strong>Sell Date</strong></label>
+      <div class="input-group">
+        <input type="text" id="sell_date" class="form-control datepicker"
+       value="<%= (@sales_record.sell_date || Date.today).strftime('%m/%d/%Y') %>" />
+        <span class="input-group-text datepicker-icon">
+          <i class="bi bi-calendar-date"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3 align-items-center">
+    <div class="col-6">
+      <label class="col-form-label"><strong>Amount Sold</strong></label>
+      <%= form.number_field :amount_sold, step: 1, class: "form-control", id:"amount_sold" %>
+    </div>
+    <div class="col-6">
+      <label class="col-form-label"><strong>Number of Sales</strong></label>
+      <%= form.number_field :items_sold, step: 1, class: "form-control", id:"items_sold" %>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3 align-items-center">
+    <div class="col-6">
+      <label class="col-form-label"><strong>Project Hours</strong></label>
+      <%= form.number_field :project_hours, step: 0.5, placeholder: 0, class: "form-control", id:"project_hours" %>
+    </div>
+    <div class="col-6">
+      <label class="col-form-label"><strong>Sales Floor Hours</strong></label>
+      <%= form.number_field :sales_floor_hours, step: 0.5, class: "form-control", id:"sales_floor_hours" %>
+    </div>
+  </div>
+
+  <div class="row" id="submit_btn_row" style="display: none;">
+    <div class="col-12 d-flex justify-content-end">
+      <%= submit_tag 'Submit', class: 'btn btn-main', id: 'submit_button', onclick:"show_spinner()", data: { turbo: false } %>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  $(document).ready(function() {
+    const salesPerson       = document.getElementById("sales_person");
+    const hiddenSalesPerson = document.getElementById("hidden_sales_person");
+    const sellDate          = document.getElementById("sell_date");
+    const hiddenSellDate    = document.getElementById("hidden_sell_date");
+    const amountSold        = document.getElementById("amount_sold");
+    const itemsSold         = document.getElementById("items_sold");
+    const projectHours      = document.getElementById("project_hours");
+    const salesFloorHours   = document.getElementById("sales_floor_hours");
+    const submitRow         = document.getElementById("submit_btn_row");
+    const form              = document.getElementById("sales_record_form");
+
+    // keep hidden fields in sync
+    $('#sales_person').on('change', function() {
+      hiddenSalesPerson.value = this.value;
+      checkAllFieldsFilled();
+    });
+
+    $('#sell_date').on('change input', function() {
+      hiddenSellDate.value = this.value;
+      checkAllFieldsFilled();
+    });
+
+    function checkAllFieldsFilled() {
+      const salesFloorValid = parseFloat(salesFloorHours.value) > 0;
+      const itemsSoldValid  = parseInt(itemsSold.value) >= 1;
+      const allFilled =
+        salesPerson.value &&
+        sellDate.value &&
+        amountSold.value &&
+        projectHours.value &&
+        salesFloorValid &&
+        itemsSoldValid;
+
+      submitRow.style.display = allFilled ? "flex" : "none";
+    }
+
+    [amountSold, itemsSold, projectHours, salesFloorHours].forEach(el => {
+      el.addEventListener("change", checkAllFieldsFilled);
+      el.addEventListener("input", checkAllFieldsFilled);
+    });
+
+    // Safety: ensure hidden fields updated before submit
+    form.addEventListener("submit", function() {
+      hiddenSalesPerson.value = salesPerson.value;
+      hiddenSellDate.value = sellDate.value;
+    });
+
+    // Run once at load
+    hiddenSalesPerson.value = salesPerson.value;
+    hiddenSellDate.value = sellDate.value;
+    checkAllFieldsFilled();
+  });
+</script>
