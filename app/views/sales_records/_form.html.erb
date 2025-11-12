@@ -3,8 +3,14 @@
     <div class="col-12">
       <label class="col-form-label"><strong>Sales Person</strong></label>
       <select id="sales_person" class="form-control select2">
-        <%= options_from_collection_for_select(SalesPerson.all.order(:first_name, :last_name), :id, ->(sp) { "#{sp.first_name} #{sp.last_name}" }) %>
+        <%= options_from_collection_for_select(
+              SalesPerson.order(:first_name, :last_name),
+              :id,
+              ->(sp) { "#{sp.first_name} #{sp.last_name}" },
+              sales_record.sales_person_id
+            ) %>
       </select>
+
     </div>
   </div>
 

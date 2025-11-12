@@ -23,6 +23,11 @@ class SalesRecordsController < ApplicationController
 
   # GET /sales_records/new
   def new
+    if SalesPerson.count == 0
+      redirect_to sales_records_path, danger: 'Add a Sales Person to start making Sales Records'
+      return
+    end
+    
     @sales_record = SalesRecord.new
   end
 
