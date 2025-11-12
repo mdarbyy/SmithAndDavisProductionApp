@@ -3,7 +3,7 @@ class SalesRecordsController < ApplicationController
 
   # GET /sales_records or /sales_records.json
   def index
-    @limit = 10
+    @limit = 20
     offset = params[:offset].to_i || 0
     @sales_records = SalesRecord.includes(:sales_person)
     .limit(@limit)

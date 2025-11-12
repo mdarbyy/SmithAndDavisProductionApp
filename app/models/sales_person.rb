@@ -2,10 +2,16 @@ class SalesPerson < ApplicationRecord
   validate :unique_sales_person
   validates :first_name, presence: true
   validates :last_name, presence: true
+  before_create :capitalize_sales_person
   before_destroy :find_records
   has_many :sales_records
 
   private 
+  
+  def capitalize_sales_person
+    self.first_name = first_name.strip.capitalize if first_name.present?
+    self.last_name  = last_name.strip.capitalize if last_name.present?
+  end
   
   def find_records
     if sales_records.exists?
