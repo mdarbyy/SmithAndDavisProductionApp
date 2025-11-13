@@ -45,7 +45,7 @@
                   <th class="stick" scope="col">Items Sold</th>
 									<th class="stick" scope="col">Amount Sold</th>
                   <th class="stick" scope="col">Sales Floor Hours</th>
-                  <th class="stick" scope="col">Daily Average</th>
+                  <th class="stick" scope="col">Average Per Hour</th>
                   <th class="stick" scope="col">Project Hours</th>
 								</tr>
 							</thead>
@@ -232,7 +232,6 @@
       }
 
       function processSalesRecords(){
-        console.log("Building chart.");
         const filteredRecords = getFilteredSalesRecords();
         const totalsByPerson = {};
         const grandTotals = {
@@ -317,8 +316,7 @@
           }
         }));
 
-        function showTotalSalesForClickedPerson(clickedName)
-        {
+        function showTotalSalesForClickedPerson(clickedName){
           const salesPersonId = Object.keys(salesPersonIdToName).find(
             id => salesPersonIdToName[id] === clickedName
           );
@@ -546,7 +544,7 @@
           // --- Row 4: Total avg per hour
           ws.mergeCells('A4:H4');
           const avgCell = ws.getCell('A4');
-          avgCell.value = `Average Per Hour: $${grandTotals.avgPerHour.toFixed(2)}/hr`;
+          avgCell.value = `Average Per Hour: $${grandTotals.avgPerHour.toFixed(2)}`;
           avgCell.font = { size: 12 };
           avgCell.alignment = { horizontal: 'center', vertical: 'middle' };
 
@@ -568,7 +566,7 @@
             'Sales Floor Hours',
             'Project Hours',
             'Rank',
-            'Average',
+            'Average Per Hour',
             'Name'
           ]);
           headerRow.font = { bold: true };
@@ -606,7 +604,7 @@
           sortedByAvg.forEach((p, i) => {
             const rowIndex = i + 8;
             const avgVal = p.avgPerHour || 0;
-            ws.getCell(rowIndex, 7).numFmt = '"$"#,##0.00"/hr"';
+            ws.getCell(rowIndex, 7).numFmt = '"$"#,##0.00""';
             ws.getCell(rowIndex, 7).value = avgVal;
             ws.getCell(rowIndex, 8).value = p.name;            
 
