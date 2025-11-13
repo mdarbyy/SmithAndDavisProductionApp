@@ -402,9 +402,9 @@
             `<div style="text-align: center;">
               <div style="font-size: 22px;">
                 <% if @start_date == @end_date %>
-                  Total Sales for <%= @start_date.strftime("%m/%d/%Y") %>
+                  Sales for <%= @start_date.strftime("%m/%d/%Y") %>
                 <% else %>
-                  Total Sales from <%= @start_date.strftime("%m/%d/%Y") %> to <%= @end_date.strftime("%m/%d/%Y") %>
+                  Sales from <%= @start_date.strftime("%m/%d/%Y") %> to <%= @end_date.strftime("%m/%d/%Y") %>
                 <% end %>
               </div>
             </div>
@@ -490,9 +490,6 @@
 						data: data,
 						color: '#193856'
 					}],
-					exporting: {
-						enabled: true
-					},
           credits: {
             enabled: false
           }
