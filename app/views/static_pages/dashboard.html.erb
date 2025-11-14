@@ -528,7 +528,7 @@
           ws.mergeCells('A2:H2');
           const totalAmountCell = ws.getCell('A2');
           totalAmountCell.value = Number(grandTotals.amountSold);
-          totalAmountCell.numFmt = '"Total Amount Sold: $"#,##0.00';
+          totalAmountCell.numFmt = '"Total Amount Sold: $"#,##0';
           totalAmountCell.font = { size: 12 };
           totalAmountCell.alignment = { horizontal: 'center', vertical: 'middle' };
 
