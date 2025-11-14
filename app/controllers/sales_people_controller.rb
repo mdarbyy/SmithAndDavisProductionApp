@@ -12,7 +12,7 @@ class SalesPeopleController < ApplicationController
 
   # GET /sales_people/1 or /sales_people/1.json
   def show
-    @sales_records = @sales_person.sales_records.order(id: :desc)
+    @sales_records = @sales_person.sales_records.order(sell_date: :desc)
     
     respond_to do |format|
       format.html
