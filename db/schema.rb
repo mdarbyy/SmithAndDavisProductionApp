@@ -10,26 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_11_12_204356) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_12_204356) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "sales_people", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "first_name"
-    t.string "last_name"
     t.boolean "is_active", default: true
+    t.string "last_name"
+    t.datetime "updated_at", null: false
   end
 
   create_table "sales_records", force: :cascade do |t|
-    t.date "sell_date"
     t.integer "amount_sold"
-    t.integer "items_sold"
-    t.decimal "sales_floor_hours"
-    t.decimal "project_hours", default: "0.0"
-    t.bigint "sales_person_id", null: false
     t.datetime "created_at", null: false
+    t.integer "items_sold"
+    t.decimal "project_hours", default: "0.0"
+    t.decimal "sales_floor_hours"
+    t.bigint "sales_person_id", null: false
+    t.date "sell_date"
     t.datetime "updated_at", null: false
     t.index ["sales_person_id"], name: "index_sales_records_on_sales_person_id"
   end
